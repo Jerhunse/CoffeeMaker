@@ -1,34 +1,6 @@
-MENU = {
-    "espresso": {
-        "ingredients": {
-            "water": 50,
-            "coffee": 18,
-        },
-        "cost": 1.5,
-    },
-    "latte": {
-        "ingredients": {
-            "water": 200,
-            "milk": 150,
-            "coffee": 24,
-        },
-        "cost": 2.5,
-    },
-    "cappuccino": {
-        "ingredients": {
-            "water": 250,
-            "milk": 100,
-            "coffee": 24,
-        },
-        "cost": 3.0,
-    }
-}
+from coffeeInfo import MENU
+from coffeeInfo import resources
 
-resources = {
-    "water": 300,
-    "milk": 200,
-    "coffee": 100,
-}
 
 # Calculate customers payment
 def process_coin():
@@ -91,23 +63,44 @@ def pick_a_coffee(drink, pay):
             resources["coffee"] -= coffee
             resources["milk"] -= milk
 
+    elif drink == "report".lower():
+        return resources
 
+# check resources
+def check_resources():
+    current_water = resources["water"]
+    current_milk = resources["milk"]
+    current_coffee = resources["coffee"]
 
-
-
-
-
+    if current_coffee <= 0:
+        print("Sorry we are out of resources to make that")
+    elif current_milk <= 0:
+        print("Sorry we are out of resources to make that")
+    elif current_water <= 0:
+        print("Sorry we are out of resources to make that")
 
 # Keep asking the user for coffee
 ask_again = True
 
-while ask_again == True:
+while ask_again:
+
     coffee = input("What would you like? (espresso/latte/cappuccino): ")
-    process_coin()
-
-# Report to show how much supplies are left
-def report():
-    current_report = {}
-    return 0
-
-
+    if coffee == "latte".lower():
+        check_resources()
+        pay = process_coin()
+        pick_a_coffee(coffee, pay)
+    elif coffee == "espresso".lower():
+        check_resources()
+        pay = process_coin()
+        pick_a_coffee(coffee, pay)
+    elif coffee == "cappuccino".lower():
+        check_resources()
+        pay = process_coin()
+        pick_a_coffee(coffee, pay)
+    elif coffee == "off":
+        ask_again = False
+    elif coffee == "report".lower():
+        current_resources = resources
+        print(current_resources)
+    else:
+        print("Invalid Entry")
